@@ -19,7 +19,7 @@ function searchCity(cityname) {
 
         var cityNameEl = $("<h2>").text(response.name);
         var displayMainDate = cityNameEl.append(" " + "-- " + mainDate);
-        var tempEL = $("<p>").text("Tempraturer: " + Math.trunc(response.main.temp) + " \xB0F");
+        var tempEL = $("<p>").text("Temperature: " + Math.trunc(response.main.temp) + " \xB0F");
         var humEl = $("<p>").text("Humidity: " + response.main.humidity + " %");
         var windEl = $("<p>").text("Wind Speed: " + Math.trunc(response.wind.speed) + " mph");
         var currentweather = response.weather[0].main;
@@ -48,20 +48,19 @@ function searchCity(cityname) {
         
 //--------------------------------------------- UV section ---------------------------------------//
 
-var lat = response.coord.lat;
-var lon = response.coord.lon;
-var queryURLUV = "https://api.openweathermap.org/data/2.5/uvi?&appid=f1ecd9ec5526a01556f7eaa323c1c11f&lat=" + lat  + "&lon=" + lon;
+    var lat = response.coord.lat;
+    var lon = response.coord.lon;
+    var queryURLUV = "https://api.openweathermap.org/data/2.5/uvi?&appid=f1ecd9ec5526a01556f7eaa323c1c11f&lat=" + lat  + "&lon=" + lon;
 
-        $.ajax({
-            url: queryURLUV,
-            method: 'GET'
-        }).then(function (response) {
-            $('#uvl-display').empty();
-            var uvlresults = response.value;
-            var uvlEl = $("<button class='btn bg-success'>").text("UV Index: " + response.value);
-      
-            $('#uvl-display').html(uvlEl);
-    
+    $.ajax({
+        url: queryURLUV,
+        method: 'GET'
+    }).then(function (response) {
+        $('#uvl-display').empty();
+        var uvlresults = response.value;
+        var uvlEl = $("<button class='btn bg-success'>").text("UV Index: " + response.value);
+        $('#uvl-display').html(uvlEl);
         });
     });
+
 
