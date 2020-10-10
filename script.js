@@ -13,12 +13,10 @@ function searchCity(cityname) {
     }).then(function (response) {
         console.log(response);
         console.log(queryURL);
-        //empty divs and ids that we need to dump content into.....
         $("#current").empty();
        var mainDate = moment().format('ddd l LT');
  
 
-        //create HTML for city information......
         var cityNameEl = $("<h2>").text(response.name);
         var displayMainDate = cityNameEl.append(" " + "-- " + mainDate);
         var tempEL = $("<p>").text("Tempraturer: " + Math.trunc(response.main.temp) + " \xB0F");
@@ -42,11 +40,28 @@ function searchCity(cityname) {
             var currentIcon = $('<img>').attr("src", "http://openweathermap.org/img/wn/13d.png");
             currentIcon.attr("style", "height: 60px; width: 60px");
         }
-        //create HTML div to append new elements to render on page....
         var newDiv = $('<div>');
 
         newDiv.append(displayMainDate, currentIcon, tempEL, humEl, windEl);
 
         $("#current").html(newDiv);
- 
-});
+        
+//--------------------------------------------- UV section ---------------------------------------//
+
+var lat = response.coord.lat;
+var lon = response.coord.lon;
+var queryURLUV = "https://api.openweathermap.org/data/2.5/uvi?&appid=f1ecd9ec5526a01556f7eaa323c1c11f&lat=" + lat  + "&lon=" + lon;
+
+        $.ajax({
+            url: queryURLUV,
+            method: 'GET'
+        }).then(function (response) {
+            $('#uvl-display').empty();
+            var uvlresults = response.value;
+            var uvlEl = $("<button class='btn bg-success'>").text("UV Index: " + response.value);
+      
+            $('#uvl-display').html(uvlEl);
+    
+        });
+    });
+
