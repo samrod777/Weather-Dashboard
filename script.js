@@ -12,9 +12,8 @@ function searchCity(cityname) {
         method: 'GET'
     }).then(function (response) {
         console.log(response);
-        console.log(queryURL);
         $("#current").empty();
-       var mainDate = moment().format('ddd l LT');
+       var mainDate = moment().format('ddd l, LT');
  
 
         var cityNameEl = $("<h2>").text(response.name);
@@ -63,4 +62,56 @@ function searchCity(cityname) {
         });
     });
 
+//--------------------------------------------5 Day forcast ---------------------------------------//
 
+    $.ajax({
+        url: queryURLforcast,
+        method: 'GET'
+    }).then(function (response) {
+        var results = response.list;
+        $("#5day").empty();
+        for (var i = 0; i < results.length; i += 8) {
+            var fiveDayDiv = $("<div class='card shadow-lg text-white bg-primary mx-auto mb-10 p-2' style='width: 8.2rem; height: 11rem;'>");
+            
+            var date = results[i].dt_txt;
+            var setD = date.substr(0,10)
+            var temp = Math.trunc(results[i].main.temp) + " \xB0F";
+            var hum = results[i].main.humidity + " %";
+   
+            var h5date = $("<h5 class='card-title'>").text(setD);
+            var pTemp = $("<p class='card-text'>").text("Temp: " + temp);;
+            var pHum = $("<p class='card-text'>").text("Humidity: " + hum);;
+
+            var weather = results[i].weather[0].main
+
+            if (weather === "Rain") {
+                var icon = $('<img>').attr("src", "http://openweathermap.org/img/wn/09d.png");
+                icon.attr("style", "height: 40px; width: 40px");
+            } else if (weather === "Clouds") {
+                var icon = $('<img>').attr("src", "http://openweathermap.org/img/wn/03d.png");
+                icon.attr("style", "height: 40px; width: 40px");
+            } 
+             else if (weather === "Clear") {
+                var icon = $('<img>').attr("src", "http://openweathermap.org/img/wn/01d.png");
+                icon.attr("style", "height: 40px; width: 40px");
+            }
+             else if (weather === "Drizzle") {
+                var icon = $('<img>').attr("src", "http://openweathermap.org/img/wn/10d.png");
+                icon.attr("style", "height: 40px; width: 40px");
+            }
+             else if (weather === "Snow") {
+                var icon = $('<img>').attr("src", "http://openweathermap.org/img/wn/13d.png");
+                icon.attr("style", "height: 40px; width: 40px");
+            }
+// console.log(results)
+
+            fiveDayDiv.append(h5date);
+            fiveDayDiv.append(icon);
+            fiveDayDiv.append(pTemp);
+            fiveDayDiv.append(pHum);
+            $("#5day").append(fiveDayDiv);
+        }
+
+    });
+
+}
