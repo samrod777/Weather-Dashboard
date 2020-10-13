@@ -45,7 +45,7 @@ function searchCity(cityname) {
 
         $("#current").html(newDiv);
         
-//--------------------------------------------- UV section ---------------------------------------//
+//  UV section 
 
     var lat = response.coord.lat;
     var lon = response.coord.lon;
@@ -62,7 +62,7 @@ function searchCity(cityname) {
         });
     });
 
-//--------------------------------------------5 Day forcast ---------------------------------------//
+// 5 day forecast
 
     $.ajax({
         url: queryURLforcast,
@@ -71,7 +71,7 @@ function searchCity(cityname) {
         var results = response.list;
         $("#5day").empty();
         for (var i = 0; i < results.length; i += 8) {
-            var fiveDayDiv = $("<div class='card shadow-lg text-white bg-primary mx-auto mb-10 p-2' style='width: 8.2rem; height: 11rem;'>");
+            var fiveDayDiv = $("<div class='card shadow-lg text-white bg-primary mx-auto mb-10 p-2' style='width: 8.2rem; height: 12rem;'>");
             
             var date = results[i].dt_txt;
             var setD = date.substr(0,10)
@@ -79,7 +79,7 @@ function searchCity(cityname) {
             var hum = results[i].main.humidity + " %";
    
             var h5date = $("<h5 class='card-title'>").text(setD);
-            var pTemp = $("<p class='card-text'>").text("Temp: " + temp);;
+            var pTemp = $("<p class='card-text'>").text("Temp: " + temp );;
             var pHum = $("<p class='card-text'>").text("Humidity: " + hum);;
 
             var weather = results[i].weather[0].main
@@ -103,7 +103,6 @@ function searchCity(cityname) {
                 var icon = $('<img>').attr("src", "http://openweathermap.org/img/wn/13d.png");
                 icon.attr("style", "height: 40px; width: 40px");
             }
-// console.log(results)
 
             fiveDayDiv.append(h5date);
             fiveDayDiv.append(icon);
@@ -115,3 +114,33 @@ function searchCity(cityname) {
     });
 
 }
+pageLoad();
+
+// Event handler
+
+$("#select-city").on("click", function (event) {
+    event.preventDefault();
+    var cityInput = $("#city-input").val().trim();
+
+    var textContent = $(this).siblings("input").val();
+    var storearr = [];
+    storearr.push(textContent);
+    localStorage.setItem('cityName', JSON.stringify(storearr));
+  
+    searchCity(cityInput);
+    pageLoad();
+});
+
+function pageLoad () {
+    var lastSearch = JSON.parse(localStorage.getItem("cityName"));
+    var searchDiv = $("<button class='btn border text-muted mt-1 shadow-sm bg-white rounded' style='width: 12rem;'>").text(lastSearch);
+    var psearch = $("<div>");
+    psearch.append(searchDiv)
+    $("#searchhistory").prepend(psearch);
+}
+
+$("#searchhistory").on('click', '.btn', function(event) {
+event.preventDefault();
+    searchCity($(this).text());
+
+});
